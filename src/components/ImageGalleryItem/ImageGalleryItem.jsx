@@ -29,5 +29,9 @@ export const ImageGalleryItem = ({ item }) => {
 };
 
 ImageGalleryItem.propTypes = {
-  item: PropTypes.object.isRequired,
+  item: PropTypes.shape({
+    webformatURL: PropTypes.string.isRequired,
+    tags: PropTypes.string.isRequired,
+    largeImageURL: PropTypes.string.isRequired,
+  }),
 };
