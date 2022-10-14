@@ -12,11 +12,12 @@ import { FaSistrix } from 'react-icons/fa';
 export const Searchbar = ({ onSubmit }) => {
   const handleSubmit = (values, { resetForm }) => {
     if (values.query.trim() === '') {
-      return alert('Please enter valid query:)');
+      return alert('Please enter valid query:))');
     }
     onSubmit(values.query.trim());
     resetForm();
   };
+
   return (
     <Header>
       <Formik initialValues={{ query: '' }} onSubmit={handleSubmit}>

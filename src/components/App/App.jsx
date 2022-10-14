@@ -1,51 +1,37 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import { GlobalStyle } from 'components/GlobalStyle';
 import { Searchbar } from 'components/Searchbar/Searchbar';
 import { AppStyled } from 'components/App/AppStyled';
 import { ImageGallery } from 'components/ImageGallery/ImageGallery';
 import { Button } from 'components/Button/Button';
 import { Loader } from 'components/Loader/Loader';
-import { ErrorMessage } from 'components/App/AppStyled';
-export class App extends Component {
-  state = {
-    searchQuery: '',
-    status: 'idle',
-    page: 1,
-    errorMessage: '',
+import { ErrorMessage } from './AppStyled';
+
+export const App = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [status, setStatus] = useState('idle');
+  const [page, setPage] = useState(1);
+
+  const onLoadMoreClick = () => {
+    setPage(page => page + 1);
   };
 
-  setSearchQuery = query => {
-    this.setState({ searchQuery: query, page: 1 });
+  const onSubmit = query => {
+    setSearchQuery(query);
+    setPage(1);
   };
 
-  onLoadMoreClick = () => {
-    this.setState(state => ({ page: state.page + 1 }));
-  };
+  return (
+    <AppStyled>
+      <Searchbar onSubmit={onSubmit} />
 
-  toggleLoading = () => {
-    this.setState(state => ({ loading: !state.loading }));
-  };
-  setStatus = newStatus => {
-    this.setState({ status: newStatus });
-  };
-
-  render() {
-    const { status, searchQuery, page } = this.state;
-    return (
-      <AppStyled>
-        <Searchbar onSubmit={this.setSearchQuery} />
-        <ImageGallery
-          query={searchQuery}
-          page={page}
-          setStatus={this.setStatus}
-        />
-        {status === 'loading' && <Loader />}
-        {status === 'resolved' && <Button onClick={this.onLoadMoreClick} />}
-        {status === 'rejected' && (
-          <ErrorMessage>Please enter another query </ErrorMessage>
-        )}
-        <GlobalStyle />
-      </AppStyled>
-    );
-  }
-}
+      <ImageGallery query={searchQuery} page={page} setStatus={setStatus} />
+      {status === 'loading' && <Loader />}
+      {status === 'resolved' && <Button onClick={onLoadMoreClick} />}
+      {status === 'rejected' && (
+        <ErrorMessage>Please enter another query </ErrorMessage>
+      )}
+      <GlobalStyle />
+    </AppStyled>
+  );
+};
