@@ -15,12 +15,13 @@ export const ImageGallery = ({ query, page, setStatus }) => {
     if (query === '') return;
     setStatus('loading');
     fetchImages(query, page, setStatus).then(data => {
-      if (data.hits.length < 1) {
-        setStatus('rejected');
-      } else {
-        setStatus('resolved');
-      }
-      setImages(prewImages => [...prewImages, ...data.hits]);
+      data.hits.length < 1 ? setStatus('rejected') : setStatus('resolved');
+      // if (data.hits.length < 1) {
+      //   setStatus('rejected');
+      // } else {
+      //   setStatus('resolved');
+      // }
+      setImages(prevImages => [...prevImages, ...data.hits]);
     });
   }, [query, page, setStatus]);
 
